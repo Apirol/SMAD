@@ -7,6 +7,11 @@ def function(x, theta):
 
 
 if __name__ == '__main__':
-    config = [2, 6, [0, 0.5, 0.4, 0.3, 0.2, 0.1], 0.1]
-    with Generator(function, config, 'data.xlsx'):
+    config = [2, 6, [0, 0.1, 0.2, 0.3, 0.2, 0.1], 0.1]
+    with Generator(function, config, 'data.xlsx') as gen:
+        gen.draw(function, config[2])
+        gen.draw_separately()
+        w_squared = gen.get_w_squared()
+        print('W**2 = ' + str(w_squared))
+        print('Variance(e) = ' + str(w_squared * config[3]))
         print('Generation done')
