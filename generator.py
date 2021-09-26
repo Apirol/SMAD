@@ -90,4 +90,4 @@ class Generator(object):
         for i in range(self.n):
             current_iter = [{'X1': self.x[i][0], 'X2': self.x[i][1], 'U': self.u[i], 'Y': self.y[i]}]
             data = data.append(current_iter, ignore_index=True)
-        data.to_excel(filename)
+        #data.to_excel(filename)

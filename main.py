@@ -7,7 +7,7 @@ def function(x, theta):
 
 
 if __name__ == '__main__':
-    config = [2, 6, [0, 0.1, 0.2, 0.3, 0.2, 0.1], 0.1]
+    config = [2, 6, [0, 0.1, 3, 0.1, 0.1, 5], 0.1]
     with Generator(function, config, 'data.xlsx') as gen:
         gen.draw(function, config[2])
         gen.draw_separately()
