@@ -42,6 +42,7 @@ class Model:
         print('Истинные значения функции, найденные значения отклика и вектор ошибки(**U,Y_CALC, Y - Y_CALC**)')
         print(data[['U', 'Y_calc', 'Y', 'E']])
         print('')
+        data.to_excel('report.xlsx')
 
         theta = pd.DataFrame()
         theta['True'] = pd.Series(config[2])
@@ -49,6 +50,7 @@ class Model:
         print('Вектор истинных коэффициентов, вектор найденных коеффициентов')
         print(theta)
         print('')
+        theta.to_excel('theta.xlsx')
 
         u = data[['U']].to_numpy()
         u = np.array([num[0] for num in u])
@@ -62,6 +64,7 @@ class Model:
             print(f"Гипотеза не отвергается\nF is {info[0][0][0]}\nF_T is {info[1]}")
         else:
             print("Полученная модель неадекватна")
+
 
     def fit(self, n: int, m: int):
         self._theta = np.dot(np.dot(np.linalg.inv(np.dot(self.X.transpose(), self.X)), self.X.transpose()), self.y)

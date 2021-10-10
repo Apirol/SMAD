@@ -50,7 +50,7 @@ class Generator(object):
 
     def __draw(self):
         assert len(self.x) > 0, 'Сначала запустите метод generate'
-        fig = plt.figure('Generator', figsize=(15, 7))
+        fig = plt.figure('Generator', figsize=(20, 10))
         ax = fig.gca(projection='3d')
         fig.subplots_adjust(bottom=-0.05, top=1, left=-0.05, right=1.05)
         tmp_range = np.linspace(-1, 1, int(sqrt(self._n)))
@@ -74,17 +74,16 @@ class Generator(object):
         ax1 = plt.subplot(grid[0, 0])
         ax1.set_xlabel('Первый критерий')
         ax1.set_ylabel('Незашумленный отклик')
-        ax1.set_title('Диаграмма рассеивания x1 и u', fontsize=22)
+        ax1.set_title('Диаграмма рассеивания x1 и u', fontsize=10)
         plt.plot(x1, self.u, 'o', color='blue')
 
         ax2 = plt.subplot(grid[0, 1])
         ax2.set_xlabel('Второй критерий')
         ax2.set_ylabel('Незашумленный отклик')
-        ax2.set_title('Диаграмма рассеивания x2 и u', fontsize=22)
+        ax2.set_title('Диаграмма рассеивания x2 и u', fontsize=10)
         plt.plot(x2, self.u, 'o', color='blue')
 
         plt.show()
-
 
     def __get_x(self) -> type(np.ndarray):
         low, high = -1, 1

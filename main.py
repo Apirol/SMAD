@@ -6,7 +6,7 @@ def function(x, theta):
            theta[2] * x[1] + theta[3] * x[1] ** 3 + theta[4] * x[0] * x[1]
 
 
-config = [2, 5, [0.1, 100, 0.1, -100, -5], 0.1]
+config = [2, 5, [0.1, 10, 0.1, -7, 6], 0.1]
 attributes = [
     'ГЕНЕРАЦИЯ ЭКСПЕРИМЕНТАЛЬНЫХ ДАННЫХ ПО СХЕМЕ ИМИТАЦИОННОГО МОДЕЛИРОВАНИЯ',
     'ОЦЕНИВАНИЕ ПАРАМЕТРОВ РЕГРЕССИОННОЙ МОДЕЛИ ПО МЕТОДУ НАИМЕНЬШИХ КВАДРАТОВ',
@@ -14,9 +14,9 @@ attributes = [
 ]
 
 
-def show_titles(menu: object):
+def show_titles(content_manager: object):
     for i in range(len(attributes)):
-        with menu:
+        with content_manager:
             print('')
 
 
