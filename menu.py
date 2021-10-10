@@ -38,8 +38,14 @@ class Menu:
             model.fit(len(y), len(config[2]))
             model.lab_exercise(config, data)
 
+    def get_input(self):
+        return self.__input_
+
     def __enter__(self):
-        print(f'{self.item_counter + 1} : {self.attributes[self.item_counter]}')
+        if self.item_counter == len(self.attributes) - 1:
+            print(f'-1 : {self.attributes[self.item_counter]}')
+        else:
+            print(f'{self.item_counter + 1} : {self.attributes[self.item_counter]}')
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.item_counter += 1
