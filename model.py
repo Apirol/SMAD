@@ -5,8 +5,8 @@ import matplotlib.pyplot as plt
 
 
 def get_w_squared(u_: np.array, config):
-    u_mean = np.full(config[1] * 20, np.mean(u_))
-    return np.dot((u_ - u_mean).transpose(), (u_ - u_mean)) / ((config[1] * 20) - 1)
+    u_mean = np.full(100, np.mean(u_))
+    return np.dot((u_ - u_mean).transpose(), (u_ - u_mean)) / (100 - 1)
 
 
 def get_variance(w, coeff):
@@ -23,6 +23,7 @@ class Model:
         self.function = function
         self.variance: int = 0
 
+ # TODO 1: Redirect to Menu
     def lab_exercise(self, config, data):
         plt.figure(figsize=(15, 10))
         plt.scatter(self.y, self.y - self.y_calc, c='blue', marker='o', label='Training data')
@@ -65,23 +66,22 @@ class Model:
         else:
             print("Полученная модель неадекватна")
 
-
     def fit(self, n: int, m: int):
         self._theta = np.dot(np.dot(np.linalg.inv(np.dot(self.X.transpose(), self.X)), self.X.transpose()), self.y)
         self.y_calc = np.dot(self.X, self._theta)
         self.e = self.y - self.y_calc
-        self.variance = np.dot(self.e.transpose(), self.e / (n - m))
+        self.variance = np.dot(self.e.transpose(), self.e / (n - m))[0][0]
 
     def predict(self, X) -> list:
         assert len(self._theta) > 0, 'Сначала запустите метод fit'
         return [self.function(i, self._theta) for i in X]
 
-    def get_info(self, n: int, m: int, variance) -> list:
+    def get_info(self, n: int, m: int, variance):
         assert len(self._theta) > 0, 'Сначала запустите метод fit'
         F, F_t, res = self.__check(n, m, variance)
-        return [F, F_t, res]
+        return F, F_t, res
 
-    def __check(self, n: int, m: int, variance) -> list:
+    def __check(self, n: int, m: int, variance):
         assert len(self._theta) > 0, 'Сначала запустите метод fit'
         res: bool
         F = self.variance / variance
@@ -91,4 +91,6 @@ class Model:
             res = True
         else:
             res = False
-        return [F, F_t, res]
+        return F, F_t, res
+
+

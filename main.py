@@ -3,14 +3,15 @@ from menu import Menu
 
 def function(x, theta):
     return theta[0] * x[0] + theta[1] * x[0] ** 2 + \
-           theta[2] * x[1] + theta[3] * x[1] ** 3 + theta[4] * x[0] * x[1]
+           theta[2] * x[1] + theta[3] * x[1] ** 3 + theta[4] * x[0] * x[1] + theta[5] * x[1]**2
 
 
-config = [2, 5, [0.1, 10, 0.1, -7, 6], 0.1]
+config = [2, 6, [0.1, 10, 0.05, -7, 6, 0.1], 0.1]
 attributes = [
     'ГЕНЕРАЦИЯ ЭКСПЕРИМЕНТАЛЬНЫХ ДАННЫХ ПО СХЕМЕ ИМИТАЦИОННОГО МОДЕЛИРОВАНИЯ',
     'ОЦЕНИВАНИЕ ПАРАМЕТРОВ РЕГРЕССИОННОЙ МОДЕЛИ ПО МЕТОДУ НАИМЕНЬШИХ КВАДРАТОВ',
-    'ВЫХОД'
+    'ИНТЕРВАЛЬНОЕ ОЦЕНИВАНИЕ, ПРОВЕРКА ГИПОТЕЗ И ПРОГНОЗИРОВАНИЕ',
+    'ВЫХОД',
 ]
 
 
@@ -21,8 +22,8 @@ def show_titles(content_manager: object):
 
 
 if __name__ == '__main__':
-    menu = Menu(attributes)
+    menu = Menu(attributes, function, config)
     while menu.get_input() != -1:
         menu.item_counter = 0
         show_titles(menu)
-        menu.execute(function, config)
+        menu.execute()
