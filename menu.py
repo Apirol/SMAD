@@ -1,11 +1,10 @@
-from model import Model, get_w_squared, get_variance
-from generator import *
-
+from exercise import *
 pd.options.display.max_rows = 100
 
 
 class Menu:
     def __init__(self, attributes: list, function: callable, config):
+        self.exercise = Exercise(config)
         self.item_counter = 0
         self.attributes = attributes
         self.__input_: int = 0
@@ -17,7 +16,7 @@ class Menu:
         if self.__input_ == 1:
             gen = Generator(self.function, self.config)
             gen.generate()
-            gen.lab_exercise()
+            self.exercise.exercise_1(gen)
             print('')
             gen.save()
         if self.__input_ == 2:
@@ -25,7 +24,7 @@ class Menu:
             data = data.drop(data.columns[[0]], axis=1)
             model = self.__get_model(data)
             model.fit(100, self.config[1])
-            model.lab_exercise(self.config, data)
+            self.exercise.exercise_2(model, data)
         if self.__input_ == 3:
             data = pd.read_excel('data.xlsx')
             data = data.drop(data.columns[[0]], axis=1)
@@ -33,10 +32,6 @@ class Menu:
 
             model = self.__get_model(data)
             model.fit(100, self.config[1] - 1)
-            print('Дисперсия ошибки незашумленного отлика и дисперсия, полученная на основе '
-                  'остаточной суммы квадратов в модели без изменений')
-            print(f"Var is {get_variance(get_w_squared(u, self.config)[0][0], self.config[3])} \
-                                                                \nVar_calc is {model.variance}")
 
             model_modified = self.__get_model(data)
             signs = data[['X1', 'X2']].to_numpy().transpose()
@@ -44,10 +39,7 @@ class Menu:
             model_modified.X[5] = signs[1] ** 2
             model_modified.X = model_modified.X.transpose()
             model_modified.fit(100, self.config[1])
-            print('Дисперсия ошибки незашумленного отлика и дисперсия, полученная на основе '
-                  'остаточной суммы квадратов в модели с добавлением регрессора x2**2')
-            print(f"Var is {get_variance(get_w_squared(u, self.config)[0][0], self.config[3])} \
-                                                                            \nVar_calc is {model_modified.variance}")
+            self.exercise.exercise_3(model, model_modified, u)
 
     def get_input(self):
         return self.__input_

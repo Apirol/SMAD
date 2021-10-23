@@ -23,49 +23,6 @@ class Model:
         self.function = function
         self.variance: int = 0
 
- # TODO 1: Redirect to Menu
-    def lab_exercise(self, config, data):
-        plt.figure(figsize=(15, 10))
-        plt.scatter(self.y, self.y - self.y_calc, c='blue', marker='o', label='Training data')
-        plt.title('Диаграмма рассеивания остатков отклика', fontsize=22)
-        plt.xlabel('Predicted values', fontsize=15)
-        plt.ylabel('Residuals', fontsize=15)
-        plt.show()
-
-        print('СГЕНЕРИРОВАННЫЕ ДАННЫЕ')
-        print(data[['X1', 'X2', 'Y']])
-        print('')
-
-        E = pd.Series([num[0] for num in self.e])
-        Y_calc = pd.Series([num[0] for num in self.y_calc])
-        data['E'] = E
-        data['Y_calc'] = Y_calc
-        print('Истинные значения функции, найденные значения отклика и вектор ошибки(**U,Y_CALC, Y - Y_CALC**)')
-        print(data[['U', 'Y_calc', 'Y', 'E']])
-        print('')
-        data.to_excel('report.xlsx')
-
-        theta = pd.DataFrame()
-        theta['True'] = pd.Series(config[2])
-        theta['Calc'] = pd.Series([num[0] for num in self._theta])
-        print('Вектор истинных коэффициентов, вектор найденных коеффициентов')
-        print(theta)
-        print('')
-        theta.to_excel('theta.xlsx')
-
-        u = data[['U']].to_numpy()
-        u = np.array([num[0] for num in u])
-        print('Дисперсия ошибки незашумленного отлика и дисперсия, полученная на основе остаточной суммы квадратов')
-        print(f"Var is {get_variance(get_w_squared(u, config), config[3])} \nVar_calc is {self.variance[0][0]}")
-        print('')
-
-        info = self.get_info(len(self.y), len(config[2]), get_variance(get_w_squared(u, config), config[3]))
-        print('Значения F при проверке гипотезы об адекватности модели')
-        if info[2]:
-            print(f"Гипотеза не отвергается\nF is {info[0][0][0]}\nF_T is {info[1]}")
-        else:
-            print("Полученная модель неадекватна")
-
     def fit(self, n: int, m: int):
         self._theta = np.dot(np.dot(np.linalg.inv(np.dot(self.X.transpose(), self.X)), self.X.transpose()), self.y)
         self.y_calc = np.dot(self.X, self._theta)
@@ -75,6 +32,9 @@ class Model:
     def predict(self, X) -> list:
         assert len(self._theta) > 0, 'Сначала запустите метод fit'
         return [self.function(i, self._theta) for i in X]
+
+    def get_theta(self):
+        return self._theta
 
     def get_info(self, n: int, m: int, variance):
         assert len(self._theta) > 0, 'Сначала запустите метод fit'

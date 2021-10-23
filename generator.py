@@ -15,16 +15,6 @@ class Generator(object):
         self.y = []
         self.e = []
 
-    def lab_exercise(self):
-        assert len(self.x) > 0, 'Сначала запустите метод generate'
-        self.__draw_separately()
-        self.__draw()
-        print('')
-        print('W**2 = ' + str(self.get_w_squared()))
-        print('')
-        print('Variance(e) = ' + str(self.get_variance(self.config[3])))
-        print('')
-
     def generate(self):
         self.x = self.__get_x()
         self.u = self.__get_u()
@@ -48,7 +38,7 @@ class Generator(object):
             data = data.append(current_iter, ignore_index=True)
         data.to_excel(filename)
 
-    def __draw(self):
+    def draw(self):
         assert len(self.x) > 0, 'Сначала запустите метод generate'
         fig = plt.figure('Generator', figsize=(20, 10))
         ax = fig.gca(projection='3d')
@@ -65,7 +55,7 @@ class Generator(object):
         plt.ylabel('Второй критерий')
         plt.show()
 
-    def __draw_separately(self):
+    def draw_separately(self):
         grid = plt.GridSpec(1, 2, wspace=.25, hspace=.25)
 
         x1 = [x[0] for x in self.x]
