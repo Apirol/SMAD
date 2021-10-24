@@ -1,5 +1,3 @@
-import numpy as np
-
 from model import Model, get_variance, get_w_squared
 from generator import *
 
@@ -71,3 +69,6 @@ class Exercise:
               'остаточной суммы квадратов в модели с добавлением регрессора x2**2')
         print(f"Var is {get_variance(get_w_squared(u, self.config)[0][0], self.config[3])} \
                                                                                   \nVar_calc is {model_mod.variance}")
+        info = model.get_info(len(model.y), self.config[1], get_variance(get_w_squared(u, self.config)[0][0],
+                                                                         self.config[3]))
+        print(info[3])
