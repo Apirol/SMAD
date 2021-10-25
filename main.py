@@ -26,4 +26,4 @@ if __name__ == '__main__':
     while menu.get_input() != -1:
         menu.item_counter = 0
         show_titles(menu)
-        menu.execute()
+        menu.execute(function, config)

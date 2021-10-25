@@ -9,7 +9,7 @@ class Generator(object):
         self.function = function
         self.config = config
         self._m = config[1]
-        self._n = config[1] * 20
+        self._n = 100
         self.x = []
         self.u = []
         self.y = []
@@ -30,7 +30,7 @@ class Generator(object):
         u_mean = np.full(self._n, np.mean(self.u))
         return np.dot((self.u - u_mean).transpose(), (self.u - u_mean)) / (self._n - 1)
 
-    def save(self, filename='data.xlsx'):
+    def save(self, filename='data/data.xlsx'):
         assert len(self.x) > 0, 'Сначала запустите метод generate'
         data = pd.DataFrame()
         for i in range(self._n):
