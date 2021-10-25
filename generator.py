@@ -56,6 +56,7 @@ class Generator(object):
         plt.show()
 
     def draw_separately(self):
+        assert len(self.x) > 0, 'Сначала запустите метод generate'
         grid = plt.GridSpec(1, 2, wspace=.25, hspace=.25)
 
         x1 = [x[0] for x in self.x]

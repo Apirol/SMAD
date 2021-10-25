@@ -1,3 +1,5 @@
+import pandas as pd
+
 from model import Model, get_variance, get_w_squared
 from generator import *
 
@@ -60,15 +62,41 @@ class Exercise:
         else:
             print("Полученная модель неадекватна")
 
-    def exercise_3(self, model: Model, model_mod: Model, u: np.array):
+    def exercise_3(self, model: Model, model_mod: Model, u: np.array, exp_interval, y_interval):
         print('Дисперсия ошибки незашумленного отлика и дисперсия, полученная на основе '
               'остаточной суммы квадратов в модели без изменений')
         print(f"Var is {get_variance(get_w_squared(u, self.config)[0][0], self.config[3])} \
-                                                                        \nVar_calc is {model.variance}")
+                                                                        \nVar_calc is {model.variance}\n\n")
         print('Дисперсия ошибки незашумленного отлика и дисперсия, полученная на основе '
               'остаточной суммы квадратов в модели с добавлением регрессора x2**2')
         print(f"Var is {get_variance(get_w_squared(u, self.config)[0][0], self.config[3])} \
-                                                                                  \nVar_calc is {model_mod.variance}")
-        info = model.get_info(len(model.y), self.config[1], get_variance(get_w_squared(u, self.config)[0][0],
-                                                                         self.config[3]))
-        print(info[3])
+                                                                                  \nVar_calc is {model_mod.variance}\n\n")
+        info = model_mod.get_info(len(model.y), self.config[1],
+                                  get_variance(get_w_squared(u, self.config)[0][0], self.config[3]))
+        intervals_array = info[3]
+        intervals = pd.DataFrame()
+        intervals['Lower'] = pd.Series(intervals_array[0])
+        intervals['Calc'] = pd.Series([num[0] for num in model.get_theta()])
+        intervals['True'] = pd.Series(self.config[2])
+        intervals['Upper'] = pd.Series(intervals_array[1])
+        intervals.to_excel('intervals.xlsx')
+
+        theta_significance_list = info[4]
+        theta_significance = pd.DataFrame()
+        theta_significance['Theta'] = pd.Series([num for num in range(self.config[1])])
+        theta_significance['Significance'] = pd.Series(theta_significance_list)
+        theta_significance.set_index('Theta')
+        theta_significance.to_excel('theta_significance.xlsx')
+
+        model_significance = info[5]
+        print(f"F = {model_significance[3]}\nF_t = {model_significance[4]}\nTSS = {model_significance[1]}\n"
+              f"RSS = {model_significance[2]}\n")
+        if model_significance[0]:
+            print('Гипотеза о незначимости регрессии принимается\n')
+        else:
+            print('Гипотеза о незначимости регрессии отвергается\n')
+
+        interval_exp = pd.DataFrame()
+        interval_exp['Y'] = pd.Series(y_interval)
+        interval_exp['Expected'] = pd.Series(exp_interval)
+        interval_exp.to_excel('interval_exp.xlsx')
