@@ -59,10 +59,10 @@ class Model:
         model_significance = self.__check_model(n, m)
         return F, F_t, res, interval, theta_significance, model_significance
 
-    def get_expected_interval(self) -> list:
+    def get_output_interval(self) -> list:
         assert len(self.theta) > 0, 'Сначала запустите метод fit'
         x1_list = np.linspace(-1, 1, 100)
-        x2 = 0
+        x2 = 1
         theta_calc = [num[0] for num in self.theta]
         lower, center, upper = [], [], []
         t = abs(stats.t.ppf(1 - 0.05, 100 - 6))
@@ -79,24 +79,25 @@ class Model:
             upper.append(fx + t * sigma)
         return [x1_list, lower, center, upper]
 
-    def get_y_calc_interval(self) -> list:
+    def get_expected_interval(self) -> list:
         assert len(self.theta) > 0, 'Сначала запустите метод fit'
-        x2_list = np.linspace(-1, 1, 10)
-        x1 = 0
+        x1_list = np.linspace(-1, 1, 100)
+        x2 = 1
         theta_calc = [num[0] for num in self.theta]
         lower, center, upper = [], [], []
         t = abs(stats.t.ppf(1 - 0.05, 100 - 6))
-        for i in range(10):
-            x2 = x2_list[i]
+        for i in range(100):
+            x1 = x1_list[i]
             x = [x1, x2]
             fx = self.function(x, theta_calc)
             fx_vector = np.array(pr.get_vector_function(x, theta_calc))
-            tmp = sqrt(np.dot(np.dot(fx_vector.transpose(), np.linalg.inv(np.dot(self.X.transpose(), self.X))), fx_vector))
-            sigma = self.variance * tmp
+            tmp = sqrt(np.dot(np.dot(fx_vector.transpose(),
+                                     np.linalg.inv(np.dot(self.X.transpose(), self.X))), fx_vector))
+            sigma = sqrt(self.variance) * tmp
             lower.append(fx - t * sigma)
             center.append(fx)
             upper.append(fx + t * sigma)
-        return [x2_list, lower, center, upper]
+        return [x1_list, lower, center, upper]
 
     def __check_model(self, n: int, m: int) -> list:
         res = False
@@ -124,10 +125,10 @@ class Model:
     def __get_interval(self, n: int, m: int) -> np.array:
         res = np.ndarray((2, m))
         matrix = np.linalg.inv(np.dot(self.X.transpose(), self.X))
-        t = abs(stats.t.ppf(1 - self.config[3], n - m))
+        t = abs(stats.t.ppf(1 - 0.05, n - m))
         for i in range(m):
-            res[0][i] = self.theta[i] - t * matrix[i][i]
-            res[1][i] = self.theta[i] + t * matrix[i][i]
+            res[0][i] = self.theta[i] - sqrt(t * matrix[i][i])
+            res[1][i] = self.theta[i] + sqrt(t * matrix[i][i])
         return res
 
     def __get_data(self, data):

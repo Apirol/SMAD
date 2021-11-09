@@ -40,7 +40,7 @@ class Menu:
             model_modified.X = model_modified.X.transpose()
             model_modified.fit(100, config[1])
             exp_interval = model_modified.get_expected_interval()
-            y_interval = model_modified.get_y_calc_interval()
+            y_interval = model_modified.get_output_interval()
             self.exercise.exercise_3(model, model_modified, config, u, exp_interval, y_interval)
 
     def get_input(self):
